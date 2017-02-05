@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Menu>
+  <Axis>Y</Axis>
+  <Effects>FadeEffect</Effects>
+  <Item>
+    <LinkType>Screen</LinkType>
+    <LinkID>LetterNumberScreen</LinkID>
+    <Image>
+      <Text>Play</Text>
+    </Image>
+  </Item>
+  <Item>
+    <Image>
+      <Text>Highscores</Text>
+    </Image>
+  </Item>
+  <Item>
+    <Image>
+      <Text>Demo</Text>
+    </Image>
+  </Item>
+  <Item>
+    <Image>
+      <Text>Advanced</Text>
+    </Image>
+  </Item>
+</Menu>

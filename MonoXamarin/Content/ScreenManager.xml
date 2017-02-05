@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ScreenManager>
+  <Image source="ScreenManager/FadeImage" >
+    <Effects>FadeEffect</Effects>
+    <Scale>
+      <X>800</X>
+      <Y>480</Y>
+    </Scale>
+  </Image>
+</ScreenManager>
