@@ -5,24 +5,29 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace MonoWin
+
+namespace MonoWinAnShare
 {
     public class GameScreen
     {
         protected ContentManager content;
         [XmlIgnore]
         public Type Type;
-        public string XmlPath;
 
         public GameScreen()
         {
-            Type = this.GetType();//Gets the type 
-            XmlPath = "Content/" + Type.ToString().Replace("MonoWin.", "") + ".xml";
+
         }
 
-        public virtual void LoadContent()
+        public void SetContent(ContentManager contentmanager)
         {
-            content = new ContentManager(ScreenManager.Instance.Content.ServiceProvider, "Content");
+            content = new ContentManager(contentmanager.ServiceProvider, "Content");
+            //content = new ContentManager(screenmanager.Content.ServiceProvider, "Content");
+        }
+
+        public virtual void LoadContent(ScreenManagerbase sm)
+        {
+
         }
 
         public virtual void UnloadContent()
@@ -32,6 +37,7 @@ namespace MonoWin
 
         public virtual void Update(GameTime gameTime)
         {
+            //TODO: If screenmanager transitioning then do not update
             InputManager.Instance.Update();
         }
 

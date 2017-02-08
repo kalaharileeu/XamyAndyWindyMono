@@ -1,61 +1,51 @@
 ﻿using System;
 using System.Xml.Serialization;
-using System.IO;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 using MonoWinAnShare;
-
-//using MonoWinAnShare; 
+using System.Collections.Generic; 
 
 namespace MonoWin
 {
     /*Loading screens and chaning screens*/
-    public class ScreenManager
+    public class ScreenManager : ScreenManagerbase
     {
-        private static ScreenManager instance;
-
-        [XmlIgnore]//Can make dimensions below public and load it through Xml
-        public Vector2 Dimensions { private set; get; }
-        [XmlIgnore]
-        public ContentManager Content { private set; get; }
         private XmlManager<GameScreen> xmlGameScreenManager;
-        GameScreen currentScreen, newScreen;
-        [XmlIgnore]
-        public GraphicsDevice GraphicsDevice;
-        [XmlIgnore]
-        public SpriteBatch Spritebatch;
-        public Image Image;//this has todo with screen change
-        [XmlIgnore]
-        public bool IsTransitioning { private set; get; }
 
         private ScreenManager()
         {
             Dimensions = new Vector2(1280, 720);//Galaxy S3 screen resolution
-            //The current screen is tile screen
-            currentScreen = new TitleScreen();
-            //currentScreen = new LetterNumberScreen();
+            //START with: The current screen is tile screen
+            //currentScreen = new TitleScreen();
+            currentScreen = new LetterNumberScreen();
             xmlGameScreenManager = new XmlManager<GameScreen>();
             xmlGameScreenManager.Type = currentScreen.Type;
-            //currentScreen = xmlGameScreenManager.Load("Content/SplashScreen.xml");// TitleScreen.SplashScreen
+            IsTransitioning = false;
         }
 
-        public static ScreenManager Instance
+        //Sunscribsion registration from then currentscreen
+        public void subscribe(List<MenuItem> items_to_register)
         {
-            get
+            foreach (var menuitem in items_to_register)
+                if (menuitem.LinkID != null)
+                    menuitem.OnLeftClickUP += Menuitem_OnLeftClickUP;
+        }
+        //Triggered on event from menu item
+        private void Menuitem_OnLeftClickUP(object sender, EventArgs e)
+        {
+            if (sender is MenuItem)
             {
-                if (instance == null)
-                {
-                    //Creen manager request a instance of screenmaanger through xml manager
-                    XmlManager<ScreenManager> xml = new XmlManager<ScreenManager>();
-                    instance = xml.Load("Content/ScreenManager.xml");
-                }
-                return instance;
+                var item = sender as MenuItem;
+                System.Diagnostics.Debug.WriteLine("Boom Event catched!!!");
+                //if (letternumberMenu.Items[letternumberMenu.ItemNumber].LinkType == "Screen")
+                if(item.LinkType == "Screen")
+                    ChangeScreens(item.LinkID);
             }
         }
-        //this is to create another screen for a screen change
+
         public void ChangeScreens(String screenName)
         {
             newScreen = (GameScreen)Activator.CreateInstance(Type.GetType("MonoWin." + screenName));
@@ -63,60 +53,35 @@ namespace MonoWin
             Image.FadeEffect.Increase = true;
             Image.Alpha = 1.0f;
             //There is a screen transitioning happening
-            IsTransitioning = true;
+            setIsTransitioning(true);
         }
 
-        void Transition(GameTime gameTime)
+        public override void LoadContent(ContentManager Content)
         {
-            if (IsTransitioning)
-            {
-                /**In ChangeScreen function  Alpha get sets to zero. Then Image update will 
-                 * will increase it upwards */
-                Image.Update(gameTime);
-                if (Image.Alpha == 1.0f)
-                {
-                    currentScreen.UnloadContent();
-                    currentScreen = newScreen;
-                    //Set the xml manager to the current screen type
-                    xmlGameScreenManager.Type = currentScreen.Type;
-                    //if there is xml file available for the current screen name
-                    if (File.Exists(currentScreen.XmlPath))//If this path exists
-                        currentScreen = xmlGameScreenManager.Load(currentScreen.XmlPath);
-                    currentScreen.LoadContent();
-                }
-                else if (Image.Alpha == 0.0f)
-                {
-                    System.Diagnostics.Debug.WriteLine("Screen Manager Transition Doen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                    Image.IsActive = false;
-                    IsTransitioning = false;
-                }
-            }
+            base.LoadContent(Content);
+            
+            //*****************************Image and Imagebase swop**********************************
+            //Create a new Imgae from Xml deserialized Imagebase through copy constructor
+            var image = new Image(Image);
+            //reassign the Imgaebase with Image instance
+            Image = image;
+            //Now i can use LoadContent
+            (Image as Image).LoadContent(this);
         }
 
-        public void LoadContent(ContentManager Content)
+        public override void UnloadContent()
         {
-            this.Content = new ContentManager(Content.ServiceProvider, "Content");
-            currentScreen.LoadContent();
-            Image.LoadContent();
+            base.UnloadContent();
         }
 
-        public void UnloadContent()
+        public override void Update(GameTime gameTime)
         {
-            currentScreen.UnloadContent();
-            Image.UnloadContent();
+            base.Update(gameTime);
         }
 
-        public void Update(GameTime gameTime)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            currentScreen.Update(gameTime);
-            Transition(gameTime);
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            currentScreen.Draw(spriteBatch);
-            if (IsTransitioning)
-                Image.Draw(spriteBatch);
+            base.Draw(spriteBatch);
         }
 
     }

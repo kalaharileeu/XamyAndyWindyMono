@@ -14,7 +14,7 @@ namespace MonoWin
         {
             Type = typeof(T);
         }
-#if WINDOWS
+#if !__ANDROID__
         public T Load(string path)
         {
             T instance;
@@ -39,8 +39,10 @@ namespace MonoWin
             }
             return instance;
         }
-        //TODO: This still modified for android
+
 #endif
+#if !__ANDROID__
+        //TODO: This still modified for android
         public void Save(string path, object obj)
         {
             using (TextWriter writer = new StreamWriter(path))
@@ -49,5 +51,6 @@ namespace MonoWin
                 xml.Serialize(writer, obj);
             }
         }
+#endif
     }
 }

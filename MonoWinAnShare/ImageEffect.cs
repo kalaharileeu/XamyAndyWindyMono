@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MonoWin
+namespace MonoWinAnShare
 {
     public class ImageEffect
     {
-        protected Image image;
+        protected Imagebase image;
         public bool IsActive;
         public Vector2 AmountOfFrames;
 
@@ -19,19 +19,17 @@ namespace MonoWin
             IsActive = false;
         }
 
-        public virtual void LoadContent(ref Image Image)
+        public virtual void LoadContent(Imagebase Image)
         {
-            this.image = Image;
+            image = Image;
         }
 
         public virtual void UnloadContent()
         {
-
         }
 
         public virtual void Update(GameTime gameTime)
         {
-
         }
     }
 }

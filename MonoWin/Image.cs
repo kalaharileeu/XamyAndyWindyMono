@@ -14,26 +14,29 @@ namespace MonoWin
     public class Image : Imagebase
     {
         ContentManager content;
-        Dictionary<string, ImageEffect> effectList;
-        public FadeEffect FadeEffect;
-        public SpriteSheetEffect SpriteSheetEffect;
+        //Dictionary<string, ImageEffect> effectList;
+        //public FadeEffect FadeEffect;
+        //public SpriteSheetEffect SpriteSheetEffect;
 
         /// <summary>
-        /// This constructor used when loading through xml serialization
+        /// This constructor used when loading through xml deserialization
         /// </summary>
         public Image()
         {
             effectList = new Dictionary<string, ImageEffect>();
         }
         /// <summary>
-        /// Use this constructor with XML file serialization
+        /// Use this constructor when constructing without Xml
+        /// deserialization
         /// </summary>
-        /// <param name="ImageSource"></param>
+        /// <param name="ImageSource">path to image</param>
         public Image(string ImageSource)
         {
             effectList = new Dictionary<string, ImageEffect>();
+            source = ImageSource;
         }
-
+        //Copy the base image values to the newly created image, ib is
+        //created by the XmlManager
         public Image(Imagebase ib)
         {
             //Have to rassign these eve though it might still just be defaults
@@ -50,69 +53,45 @@ namespace MonoWin
             SpriteSheetEffect = null;
             amountofframes = ib.amountofframes;//default
         }
-        //ref needed here chaning the point to object
-        void SetEffect<T>(ref T effect)
-        {
-            if (effect == null)
-                effect = (T)Activator.CreateInstance(typeof(T));
-            else
-            {
-                (effect as ImageEffect).IsActive = true;
-                var obj = this;
-                (effect as ImageEffect).LoadContent(ref obj);
-            }
-            if (!effectList.ContainsKey((effect.GetType().ToString().Replace("MonoWin.", ""))))
-                effectList.Add(effect.GetType().ToString().Replace("MonoWin.", ""), (effect as ImageEffect));
+        ////ref needed here chaning the point to object
+        //void SetEffect<T>(ref T effect)
+        //{
+        //    if (effect == null)
+        //        effect = (T)Activator.CreateInstance(typeof(T));
+        //    else
+        //    {
+        //        (effect as ImageEffect).IsActive = true;
+        //        var obj = this;
+        //        (effect as ImageEffect).LoadContent(obj);
+        //    }
+        //    if (!effectList.ContainsKey((effect.GetType().ToString().Replace("MonoWinAnShare.", ""))))
+        //        effectList.Add(effect.GetType().ToString().Replace("MonoWinAnShare.", ""), (effect as ImageEffect));
 
-        }
+        //}
 
         public override void ActivateEffect(string effect)
         {
-            if (effectList.ContainsKey(effect))
-            {
-                effectList[effect].IsActive = true;
-                var obj = this;
-                effectList[effect].LoadContent(ref obj);
-                if (effect == "SpriteSheetEffect")
-                    effectList[effect].SetAmountFrames(this.amountofframes);
-            }
+            base.ActivateEffect(effect);
         }
 
         public override void DeactivateEffect(string effect)
         {
-            if (effectList.ContainsKey(effect))
-            {
-                effectList[effect].IsActive = false;
-                effectList[effect].UnloadContent();
-            }
+            base.DeactivateEffect(effect);
         }
         //Store the effects of the class in the effects string
         public override void StoreEffects()
         {
-            Effects = String.Empty;
-            foreach (var effect in effectList)
-            {
-                if (effect.Value.IsActive)
-                    Effects += effect.Key + ":";
-            }
-            if (Effects != String.Empty)
-                Effects.Remove(Effects.Length - 1);
+            base.StoreEffects();
         }
 
         public override void RestoreEffects()
         {
-            foreach (var effect in effectList)
-                DeactivateEffect(effect.Key);
-
-            string[] split = Effects.Split(':');
-            foreach (string s in split)
-                ActivateEffect(s);
+            base.RestoreEffects();
         }
 
-        public override void LoadContent()
+        public void LoadContent(ScreenManager screenmanager)
         {
-            System.Diagnostics.Debug.WriteLine("LoadContent Image!");
-            content = new ContentManager(ScreenManager.Instance.Content.ServiceProvider, "Content");
+            content = new ContentManager(screenmanager.Content.ServiceProvider, "Content");
 #if WINDOWS
             if (source != String.Empty)
                 Texture = content.Load<Texture2D>(source);
@@ -143,22 +122,22 @@ namespace MonoWin
             if (SourceRect == Rectangle.Empty)
                 SourceRect = new Rectangle(0, 0, (int)dimensions.X, (int)dimensions.Y);
 
-            renderTarget = new RenderTarget2D(ScreenManager.Instance.GraphicsDevice,
+            renderTarget = new RenderTarget2D(screenmanager.GraphicsDevice,
                 (int)dimensions.X, (int)dimensions.Y);
 
-            ScreenManager.Instance.GraphicsDevice.SetRenderTarget(renderTarget);
+            screenmanager.GraphicsDevice.SetRenderTarget(renderTarget);
             //The screen is its own render target
-            ScreenManager.Instance.GraphicsDevice.Clear(Color.Transparent);
-            ScreenManager.Instance.Spritebatch.Begin();
+            screenmanager.GraphicsDevice.Clear(Color.Transparent);
+            screenmanager.Spritebatch.Begin();
             if (Texture != null)
-                ScreenManager.Instance.Spritebatch.Draw(Texture, Vector2.Zero, Color.White);
-            ScreenManager.Instance.Spritebatch.DrawString(font, Text, Vector2.Zero, Color.White);
-            ScreenManager.Instance.Spritebatch.End();
+                screenmanager.Spritebatch.Draw(Texture, Vector2.Zero, Color.White);
+            screenmanager.Spritebatch.DrawString(font, Text, Vector2.Zero, Color.White);
+            screenmanager.Spritebatch.End();
 
             Texture = renderTarget;
 
-            ScreenManager.Instance.GraphicsDevice.SetRenderTarget(null);
-
+            screenmanager.GraphicsDevice.SetRenderTarget(null);
+            //Load the defaulf effects, they will be null initialy, activated to not active
             SetEffect<FadeEffect>(ref FadeEffect);
             SetEffect<SpriteSheetEffect>(ref SpriteSheetEffect);
 
@@ -173,17 +152,12 @@ namespace MonoWin
         public override void UnloadContent()
         {
             content.Unload();
-            foreach (var effect in effectList)
-                DeactivateEffect(effect.Key);
+            base.UnloadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
-            foreach (var effect in effectList)
-            {
-                if (effect.Value.IsActive)
-                    effect.Value.Update(gameTime);
-            }
+            base.Update(gameTime);
         }
         //this is mostly for single frame sprites or multiframe with spritesheet effects
         public override void Draw(SpriteBatch spriteBatch)

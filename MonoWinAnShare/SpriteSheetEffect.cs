@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace MonoWin
+namespace MonoWinAnShare
 {
     public class SpriteSheetEffect : ImageEffect
     {
@@ -37,9 +37,9 @@ namespace MonoWin
             FrameCounter = 0;
         }
         //send a refernece to the efffect to manipulate immage values
-        public override void LoadContent(ref Image Image)
+        public override void LoadContent(Imagebase Image)
         {
-            base.LoadContent(ref Image);
+            base.LoadContent(Image);
         }
 
         public override void UnloadContent()

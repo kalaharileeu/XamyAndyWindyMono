@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using MonoWinAnShare;
+
 namespace MonoWin
 {
     /// <summary>
@@ -11,6 +13,8 @@ namespace MonoWin
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        //This should be the only instance screenmanager
+        ScreenManager thescreenmanager;
 
         public Game1()
         {
@@ -31,6 +35,11 @@ namespace MonoWin
             graphics.ApplyChanges();
             //Add initialization logic here
             IsMouseVisible = true;
+            //Only screen manager here
+            //Screen manager request a instance of screenmaanger through xml manager
+            XmlManager<ScreenManager> xml = new XmlManager<ScreenManager>();
+            thescreenmanager = xml.Load("Content/ScreenManager.xml");
+
             base.Initialize();
         }
 
@@ -42,9 +51,9 @@ namespace MonoWin
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            ScreenManager.Instance.GraphicsDevice = GraphicsDevice;//These variables from Screenmanager
-            ScreenManager.Instance.Spritebatch = spriteBatch;//From Screenmanager. both these have to ne done
-            ScreenManager.Instance.LoadContent(Content);
+            thescreenmanager.GraphicsDevice = GraphicsDevice;//These variables from Screenmanager
+            thescreenmanager.Spritebatch = spriteBatch;//From Screenmanager. both these have to ne done
+            thescreenmanager.LoadContent(Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -55,7 +64,7 @@ namespace MonoWin
         protected override void UnloadContent()
         {
             //Unload any non ContentManager content here
-            ScreenManager.Instance.UnloadContent();
+            thescreenmanager.UnloadContent();
         }
 
         /// <summary>
@@ -69,7 +78,7 @@ namespace MonoWin
                 Exit();
 
             // update logic here
-            ScreenManager.Instance.Update(gameTime);
+            thescreenmanager.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -83,10 +92,11 @@ namespace MonoWin
 
             //drawing code here
             spriteBatch.Begin();
-            ScreenManager.Instance.Draw(spriteBatch);
+            thescreenmanager.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
+            
         }
     }
 }

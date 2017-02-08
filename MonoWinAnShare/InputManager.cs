@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input.Touch;
 #endif
 
-namespace MonoWin
+namespace MonoWinAnShare
 {
     /// <summary>
     /// Inputmanager get polled constantly to check for keyboard and mouse updates
@@ -16,20 +16,31 @@ namespace MonoWin
     public class InputManager
     {
         private static InputManager instance;
+        //This can be set by the screenmanager if it is transitioning
+        private bool isTransitioning;
 
         public static InputManager Instance
         {
             get
             {
                 if (instance == null)
+                {
                     instance = new InputManager();
+                    //initialize to false on start up
+                    instance.isTransitioning = false;
+                }
                 return instance;
             }
         }
-#if WINDOWS
+
+        public void SetisTransitioning(bool isOrNot)
+        {
+            isTransitioning = isOrNot;
+        }
+#if !__ANDROID__
         InputManager()
         {
-            leftmouseReleasePosition = new Vector2(0, 0);
+            leftmouseReleasePosition = new Vector2(-1, -1);
           //  isLeftMosueRelease = false;
         }
         //GameSreen calls input manager update
@@ -37,10 +48,10 @@ namespace MonoWin
         {
             prevkeystate = currentkeystate;
             prevmousestate = currentmousestate;
-            if (!ScreenManager.Instance.IsTransitioning)
+            if (!isTransitioning)
             {
-                currentkeystate = Keyboard.GetState();
-                currentmousestate = Mouse.GetState();
+            currentkeystate = Keyboard.GetState();
+            currentmousestate = Mouse.GetState();
             }
         }
         //**********************Keyboard functions********************************
@@ -108,7 +119,7 @@ namespace MonoWin
         public void Update()
         {
             previousState = currentState;
-            if (!ScreenManager.Instance.IsTransitioning)
+            if (!isTransitioning)
             {
                 //TouchColection is a list of touch values
                 currenttouchcollection = TouchPanel.GetState();
