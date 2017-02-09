@@ -25,7 +25,7 @@ namespace MonoWinAnShare
         [XmlIgnore]
         public Texture2D Texture;
         Vector2 origin;
-        //ContentManager content;
+        protected ContentManager content;
         protected RenderTarget2D renderTarget;//Something clever?
         protected SpriteFont font;
         protected Dictionary<string, ImageEffect> effectList;
@@ -63,7 +63,7 @@ namespace MonoWinAnShare
             Scale = Vector2.One;
             Alpha = 1.0f;
             SourceRect = Rectangle.Empty;
-            //effectList = new Dictionary<string, ImageEffect>();
+            effectList = new Dictionary<string, ImageEffect>();
            // amountofframes = new Vector2(5, 1);//This is the default value for player
         }
 
@@ -126,11 +126,69 @@ namespace MonoWinAnShare
                 ActivateEffect(s);
         }
 
-        //public virtual void LoadContent(ScreenManagerbase screenmanager) {}
+        public virtual void LoadContent(ScreenManagerbase screenmanager)
+        {
+            content = new ContentManager(screenmanager.Content.ServiceProvider, "Content");
+#if !__ANDROID__
+            if (source != String.Empty)
+                Texture = content.Load<Texture2D>(source);
+#endif
+#if __ANDROID__
+            //Loading for android
+            if (source != String.Empty)
+            {
+                using (var stream = TitleContainer.OpenStream(source))
+                {
+                    Texture = Texture2D.FromStream(ScreenManager.Instance.GraphicsDevice, stream);
+                }
+            }
+#endif
+            font = content.Load<SpriteFont>(FontName);
+
+            Vector2 dimensions = Vector2.Zero;
+
+            if (Texture != null)
+                dimensions.X += Texture.Width;
+            dimensions.X += font.MeasureString(Text).X;
+
+            if (Texture != null)
+                dimensions.Y = Math.Max(Texture.Height, font.MeasureString(Text).Y);
+            else
+                dimensions.Y = font.MeasureString(Text).Y;
+
+            if (SourceRect == Rectangle.Empty)
+                SourceRect = new Rectangle(0, 0, (int)dimensions.X, (int)dimensions.Y);
+
+            renderTarget = new RenderTarget2D(screenmanager.GraphicsDevice,
+                (int)dimensions.X, (int)dimensions.Y);
+
+            screenmanager.GraphicsDevice.SetRenderTarget(renderTarget);
+            //The screen is its own render target
+            screenmanager.GraphicsDevice.Clear(Color.Transparent);
+            screenmanager.Spritebatch.Begin();
+            if (Texture != null)
+                screenmanager.Spritebatch.Draw(Texture, Vector2.Zero, Color.White);
+            screenmanager.Spritebatch.DrawString(font, Text, Vector2.Zero, Color.White);
+            screenmanager.Spritebatch.End();
+
+            Texture = renderTarget;
+
+            screenmanager.GraphicsDevice.SetRenderTarget(null);
+            //Load the defaulf effects, they will be null initialy, activated to not active
+            SetEffect<FadeEffect>(ref FadeEffect);
+            SetEffect<SpriteSheetEffect>(ref SpriteSheetEffect);
+
+            if (Effects != String.Empty)
+            {
+                string[] split = Effects.Split(':');
+                foreach (string item in split)
+                    ActivateEffect(item);
+            }
+        }
 
         public virtual void UnloadContent()
         {
-            //content.Unload();
+            content.Unload();
             foreach (var effect in effectList)
                 DeactivateEffect(effect.Key);
         }

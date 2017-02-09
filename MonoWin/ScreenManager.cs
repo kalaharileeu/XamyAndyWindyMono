@@ -59,14 +59,15 @@ namespace MonoWin
         public override void LoadContent(ContentManager Content)
         {
             base.LoadContent(Content);
+            Image.LoadContent(this);
             
-            //*****************************Image and Imagebase swop**********************************
-            //Create a new Imgae from Xml deserialized Imagebase through copy constructor
-            var image = new Image(Image);
-            //reassign the Imgaebase with Image instance
-            Image = image;
-            //Now i can use LoadContent
-            (Image as Image).LoadContent(this);
+            ////*****************************Image and Imagebase swop**********************************
+            ////Create a new Imgae from Xml deserialized Imagebase through copy constructor
+            //var image = new Image(Image);
+            ////reassign the Imgaebase with Image instance
+            //Image = image;
+            ////Now i can use LoadContent
+            //(Image as Image).LoadContent(this);
         }
 
         public override void UnloadContent()
