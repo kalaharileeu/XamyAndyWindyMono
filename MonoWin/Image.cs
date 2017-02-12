@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-//using System.Xml.Serialization;
-
-using Microsoft.Xna.Framework;
-//using Microsoft.Xna.Framework.Content;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 using MonoWinAnShare;
@@ -34,24 +28,6 @@ namespace MonoWin
         {
             //effectList = new Dictionary<string, ImageEffect>();
             //source = ImageSource;
-        }
-        //Copy the base image values to the newly created image, ib is
-        //created by the XmlManager
-        public Image(Imagebase ib)
-        {
-            //Have to rassign these eve though it might still just be defaults
-            source = ib.source;
-            Text = ib.Text;
-            Effects = ib.Effects;
-            FontName = ib.FontName;
-            Position = ib.Position;
-            Scale = ib.Scale;
-            Alpha = ib.Alpha;
-            SourceRect = ib.SourceRect;
-            effectList = new Dictionary<string, ImageEffect>();
-            FadeEffect = null;
-            SpriteSheetEffect = null;
-            amountofframes = ib.amountofframes;//default
         }
 
         public override void ActivateEffect(string effect)

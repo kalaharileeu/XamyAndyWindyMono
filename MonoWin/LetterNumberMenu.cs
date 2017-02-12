@@ -14,24 +14,12 @@ namespace MonoWin
 
         public override void LoadContent(ScreenManagerbase screenmanagerbase)
         {
-            //string[] split = Effects.Split(':');
-            //foreach (MenuItem item in Items)
-            //{
-            //    //Load a new Image from xml loaded baseImage
-            //    var image = new Image(item.Image);
-            //    //set the old baseImage to the new Image
-            //    (item.Image = image).LoadContent(screenmanagerbase);
-            //    foreach (string s in split)
-            //        item.Image.ActivateEffect(s);
-            //}
-            //AlignMeniItems(screenmanagerbase.Dimensions.X, screenmanagerbase.Dimensions.Y);
+            base.LoadContent(screenmanagerbase);
         }
 
         public override void UnloadContent()
         {
-            //selected = false;
-            foreach (MenuItem item in Items)
-                item.Image.UnloadContent();
+            base.UnloadContent();
         }
 
         public override void Update(GameTime gametime)

@@ -2,56 +2,85 @@
 <LetterNumberMenu>
   <Axis>Y</Axis>
   <Effects>FadeEffect</Effects>
+  <Gridsize>25</Gridsize>
   <Item>
     <LinkType>Screen</LinkType>
     <LinkID>LetterNumberScreen</LinkID>
     <Image>
       <Text>1</Text>
+      <Position>7</Position>
     </Image>
   </Item>
     <Item>
     <Image>
       <Text>2</Text>
+      <Position>8</Position>
     </Image>
   </Item>
   <Item>
     <Image>
       <Text>3</Text>
+      <Position>9</Position>
     </Image>
   </Item>
     <Item>
     <Image>
       <Text>4</Text>
+      <Position>12</Position>
     </Image>
   </Item>
   <Item>
     <Image>
       <Text>5</Text>
+      <Position>13</Position>
     </Image>
   </Item>
   <Item>
     <Image>
       <Text>6</Text>
+      <Position>14</Position>
     </Image>
   </Item>
     <Item>
     <Image>
       <Text>7</Text>
+      <Position>17</Position>
     </Image>
   </Item>
     <Item>
     <Image>
       <Text>8</Text>
+      <Position>18</Position>
     </Image>
   </Item>
   <Item>
     <Image>
       <Text>9</Text>
+      <Position>19</Position>
+    </Image>
+  </Item>
+  <Item>
+   <Image>
+    <Text>0</Text>
+    <Position>23</Position>
+  </Image>
+  </Item>
+    <Item>
+    <Image>
+      <Text>_</Text>
+      <Position>2</Position>
     </Image>
   </Item>
   <Item>
     <Image>
       <Text>_</Text>
+      <Position>3</Position>
+    </Image>
+  </Item>
+  <Item>
+    <Image>
+      <Text>_</Text>
+      <Position>4</Position>
     </Image>
   </Item>
 </LetterNumberMenu>

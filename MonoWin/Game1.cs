@@ -31,6 +31,7 @@ namespace MonoWin
         protected override void Initialize()
         {
             graphics.PreferredBackBufferWidth = 1280;
+            //graphics.PreferredBackBufferWidth = 720;
             graphics.PreferredBackBufferHeight = 720;
             graphics.ApplyChanges();
             //Add initialization logic here
