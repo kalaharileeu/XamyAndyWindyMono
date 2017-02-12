@@ -40,10 +40,6 @@ namespace MonoWinAnShare
             foreach (MenuItem item in Items)
             {
                 item.Image.LoadContent(screenmanagerbase);
-                ////Load a new Image from xml loaded baseImage
-                //var image = new Image(item.Image);
-                ////set the old baseImage to the new Image
-                //(item.Image = image).LoadContent(screenmanagerbase);
                 foreach (string s in split)
                     item.Image.ActivateEffect(s);
             }
@@ -52,6 +48,8 @@ namespace MonoWinAnShare
 
         public virtual void UnloadContent()
         {
+            foreach (MenuItem item in Items)
+                item.Image.UnloadContent();
         }
 
         public virtual void Update(GameTime gametime)
@@ -77,11 +75,12 @@ namespace MonoWinAnShare
                     {
                         //fire the event for the item
                         Items[i].LeftClickedUP();
+                        i = Items.Count;
                     }
                 }
             }
 #endif
-#if __ANDROID__
+//#if __ANDROID__
             if (InputManager.Instance.TouchRelease())
             {
                 for (int i = 0; i < Items.Count; i++)
@@ -92,11 +91,11 @@ namespace MonoWinAnShare
                         Items[i].LeftClickedUP();
                         //itemNumber = i;
                         //selected = true;
-                        //System.Diagnostics.Debug.WriteLine("Boom!!!");
+                        System.Diagnostics.Debug.WriteLine("Boom!!!");
                     }
                 }
             }
-#endif
+//#endif
         }
 
         public void Draw(SpriteBatch spriteBatch)

@@ -46,7 +46,7 @@ namespace MonoWinAnShare
             Scale = Vector2.One;
             Alpha = 1.0f;
             SourceRect = Rectangle.Empty;
-            //effectList = new Dictionary<string, ImageEffect>();
+            effectList = new Dictionary<string, ImageEffect>();
             amountofframes = new Vector2(5, 1);//This is the default value for player
 
         }

@@ -11,6 +11,8 @@ namespace MonoXamarin
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        //This should be the only instance screenmanager
+        ScreenManager thescreenmanager;
 
         public Game1()
         {
@@ -32,7 +34,10 @@ namespace MonoXamarin
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            //Only screen manager here
+            //Screen manager request a instance of screenmaanger through xml manager
+            XmlManager<ScreenManager> xml = new XmlManager<ScreenManager>();
+            thescreenmanager = xml.Load("Content/ScreenManager.xml");
 
             base.Initialize();
         }
@@ -45,10 +50,10 @@ namespace MonoXamarin
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            ScreenManager.Instance.GraphicsDevice = GraphicsDevice;//These variables from Screenmanager
-            ScreenManager.Instance.Spritebatch = spriteBatch;//From Screenmanager. both these have to ne done
-            ScreenManager.Instance.LoadContent(Content);
-
+            thescreenmanager.GraphicsDevice = GraphicsDevice;//These variables from Screenmanager
+            thescreenmanager.Spritebatch = spriteBatch;//From Screenmanager. both these have to ne done
+            thescreenmanager.LoadContent(Content);
+            // TODO: use this.Content to load your game content here
             // TODO: use this.Content to load your game content here
         }
 
@@ -58,8 +63,8 @@ namespace MonoXamarin
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
-            ScreenManager.Instance.UnloadContent();
+            //Unload any non ContentManager content here
+            thescreenmanager.UnloadContent();
         }
 
         /// <summary>
@@ -72,9 +77,8 @@ namespace MonoXamarin
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 Exit();
 
-            // TODO: Add your update logic here
             // update logic here
-            ScreenManager.Instance.Update(gameTime);
+            thescreenmanager.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -88,7 +92,7 @@ namespace MonoXamarin
 
             //drawing code here
             spriteBatch.Begin();
-            ScreenManager.Instance.Draw(spriteBatch);
+            thescreenmanager.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

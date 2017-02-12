@@ -27,9 +27,6 @@ namespace MonoWinAnShare
 
         public ScreenManagerbase()
         {
-            //xmlGameScreenManager = new XmlManager<GameScreen>();
-            //xmlGameScreenManager.Type = currentScreen.Type;
-            //IsTransitioning = false;
         }
 
         //set transitioning variable for affected instances
@@ -40,15 +37,15 @@ namespace MonoWinAnShare
             InputManager.Instance.SetisTransitioning(isOrNot);
         }
 
-        //public void ChangeScreens(String screenName)
-        //{
-        //    newScreen = (GameScreen)Activator.CreateInstance(Type.GetType("MonoWinAnShare." + screenName));
-        //    Image.IsActive = true;
-        //    Image.FadeEffect.Increase = true;
-        //    Image.Alpha = 1.0f;
-        //    //There is a screen transitioning happening
-        //    setIsTransitioning(true);
-        //}
+        public virtual void ChangeScreens(String screenName)
+        {
+            //newScreen = (GameScreen)Activator.CreateInstance(Type.GetType("MonoWinAnShare." + screenName));
+            Image.IsActive = true;
+            Image.FadeEffect.Increase = true;
+            Image.Alpha = 1.0f;
+            //There is a screen transitioning happening
+            setIsTransitioning(true);
+        }
 
         void Transition(GameTime gameTime)
         {
@@ -76,7 +73,7 @@ namespace MonoWinAnShare
         {
             this.Content = new ContentManager(Content.ServiceProvider, "Content");
             currentScreen.LoadContent(this);
-            //Image.LoadContent(this);
+            Image.LoadContent(this);
         }
         public virtual void UnloadContent()
         {

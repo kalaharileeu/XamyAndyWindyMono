@@ -6,55 +6,10 @@
     <LinkType>Screen</LinkType>
     <LinkID>LetterNumberScreen</LinkID>
     <Image>
-      <Text>one</Text>
-    </Image>
-  </Item>
-  <Item>
-    <Image>
-      <Text>two</Text>
-    </Image>
-  </Item>
-  <Item>
-    <Image>
-      <Text>three</Text>
-    </Image>
-  </Item>
-    <Item>
-    <Image>
-      <Text>four</Text>
-    </Image>
-  </Item>
-  <Item>
-    <Image>
-      <Text>five</Text>
-    </Image>
-  </Item>
-  <Item>
-    <Image>
-      <Text>six</Text>
-    </Image>
-  </Item>
-    <Item>
-    <Image>
-      <Text>seven</Text>
-    </Image>
-  </Item>
-    <Item>
-    <Image>
-      <Text>eight</Text>
-    </Image>
-  </Item>
-  <Item>
-    <Image>
-      <Text>nine</Text>
-    </Image>
-  </Item>
-  <Item>
-    <Image>
       <Text>1</Text>
     </Image>
   </Item>
-    <Item>
+  <Item>
     <Image>
       <Text>2</Text>
     </Image>
@@ -64,7 +19,7 @@
       <Text>3</Text>
     </Image>
   </Item>
-    <Item>
+  <Item>
     <Image>
       <Text>4</Text>
     </Image>
@@ -79,12 +34,12 @@
       <Text>6</Text>
     </Image>
   </Item>
-    <Item>
+  <Item>
     <Image>
       <Text>7</Text>
     </Image>
   </Item>
-    <Item>
+  <Item>
     <Image>
       <Text>8</Text>
     </Image>
@@ -92,6 +47,11 @@
   <Item>
     <Image>
       <Text>9</Text>
+    </Image>
+  </Item>
+  <Item>
+    <Image>
+      <Text>_</Text>
     </Image>
   </Item>
 </LetterNumberMenu>
