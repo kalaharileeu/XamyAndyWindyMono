@@ -16,6 +16,14 @@ namespace MonoWinAnShare
         public int width;//width in pixel
         [XmlAttribute]
         public int height;//height in pixel
+        [XmlAttribute]
+        public int gridsizeX;//width in pixel
+        [XmlAttribute]
+        public int gridsizeY;//width in pixel
+        [XmlAttribute]
+        public int gridpositionX;//height in pixel
+        [XmlAttribute]
+        public int gridpositionY;//height in pixel
         //public string Path;
         public float Alpha;
         public string Text, FontName;
